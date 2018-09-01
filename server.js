@@ -12,7 +12,7 @@ const {
     RestaurantInfo
 } = require('./models')
 
-
+const { PORT } = require('./config');
 
 
 let server
