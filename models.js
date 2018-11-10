@@ -7,6 +7,13 @@ const menuSchema = new Schema({
         required: true
     }
 })
+// , { toJSON: { virtuals: true }})
+
+// menuSchema.virtual('menuItems', {
+//     ref: 'MenuItem',
+//     localField: '_id',
+//     foreignField: 'menu'
+// })
 
 const menuItemSchema = new Schema({
     name: {
@@ -16,6 +23,10 @@ const menuItemSchema = new Schema({
     description: String,
     cost: Number,
     comments: [String],
+    // menu: [{
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Menu'
+    // }]
 })
 
 const contactInfoSchema = new Schema({
@@ -36,9 +47,13 @@ const restaurantInfoSchema = new Schema({
         type: String,
         required: true
     },
-    address: [String],
-    // add reference to contact info schema??
+    address: [String]
+    // contactInfo: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'ContactInfo'
+    // }
 })
+
 
 const Menu = mongoose.model('Menu', menuSchema)
 const MenuItem = mongoose.model('MenuItem', menuItemSchema)

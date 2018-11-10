@@ -13,5 +13,8 @@
     "express": "^4.16.3",
     "faker": "^4.1.0",
     "mongoose": "^5.2.12"
+  },
+  "devDependencies": {
+    "morgan": "^1.9.1"
   }
 }

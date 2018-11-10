@@ -1,0 +1,25 @@
+{
+    "name": "Dinner",
+    "items": [
+        {
+            "name": "Sed ut perspiciatis",
+            "description": "sed quia non numquam eius modi",
+            "cost": 15.95
+        },
+        {
+            "name": "Quasi architecto",
+            "description": "unde omnis iste natus error sit voluptatem accusantium doloremque",
+            "cost": 12.95
+        },
+        {
+            "name": "Minima veniam",
+            "description": "quis autem vel eum iure reprehenderit qui",
+            "cost": 13.05
+        },
+        {
+            "name": "Dolore magnam aliquam",
+            "description": "unde omnis iste natus error sit voluptatem accusantium doloremque",
+            "cost": 21.95
+        }
+    ]
+}
