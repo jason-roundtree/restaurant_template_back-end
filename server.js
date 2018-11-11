@@ -8,12 +8,18 @@ const morgan = require('morgan')
 
 const { 
     Menu, 
-    MenuItem, 
+    MenuItems, 
     ContactInfo, 
     RestaurantInfo
 } = require('./models')
 
 const { CLIENT_ORIGIN, DB_URL, PORT } = require('./config');
+
+app.use(
+    cors({
+        origin: CLIENT_ORIGIN
+	})
+)
 
 mongoose.connect(DB_URL, { useNewUrlParser: true });
 
@@ -21,7 +27,7 @@ if (process.env.NODE_ENV !== 'test') {
 	app.use(morgan('common'));
 }   
 
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 // create menu
 app.post('/menu', jsonParser, (req, res) => {
@@ -36,7 +42,6 @@ app.post('/menu', jsonParser, (req, res) => {
 
 // get all menus
 app.get('/menus', (req, res) => {
-    console.log('req.body: ', req.body)
     Menu.find()
         .then(menu => {
             res.status(200).json(menu)
@@ -58,22 +63,39 @@ app.get('/menu/:id', (req, res) => {
 })
 
 // create menu item(s)
-app.post('menu/:id', jsonParser, (req, res) => {
-    const menuItem = {
-        menu: req.params.id,
-        name: req.body.name,
-        description: req.body.description,
-        cost: req.body.cost,
-        comments: req.body.comments
-    }
-    MenuItems.create(menuItem)
+app.post('/menu_items', jsonParser, (req, res) => {
+    console.log('menu_item: ', req.body)
+    let menuItems = []
+    req.body.forEach((item, index) => {
+        menuItems.push({
+            name: item.name,
+            description: item.description,
+            cost: item.cost,
+            // comments: item.comments,
+            // menus: req.body.menus
+        })
+    })
+    MenuItems.insertMany(menuItems)
         .then(item => {
             res.status(201).json(item)
+        })
+        .catch(err => {
+            console.log('err: ', err)
+            res.status(400).json(err)
+        })
+})
+
+// get all menu items
+app.get('/menu_items', (req, res) => {
+    MenuItems.find()
+        .then(item => {
+            res.status(200).json(item)
         })
         .catch(err => {
             res.status(400).json(err)
         })
 })
+
 
 // update menu
 // update menu item(s)

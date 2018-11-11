@@ -23,10 +23,13 @@ const menuItemSchema = new Schema({
     description: String,
     cost: Number,
     comments: [String],
-    // menu: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Menu'
-    // }]
+    // a menu item can belong to multiple menus
+    menus: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Menu'
+    }],
+    // for sub-categorization like Meats, Fish, Pasta, Desserts, etc. Should string be id reference instead?
+    // menuSubCategories: [String]
 })
 
 const contactInfoSchema = new Schema({
@@ -56,8 +59,8 @@ const restaurantInfoSchema = new Schema({
 
 
 const Menu = mongoose.model('Menu', menuSchema)
-const MenuItem = mongoose.model('MenuItem', menuItemSchema)
+const MenuItems = mongoose.model('MenuItems', menuItemSchema)
 const ContactInfo = mongoose.model('ContactInfo', contactInfoSchema)
 const RestaurantInfo = mongoose.model('RestaurantInfo', restaurantInfoSchema)
 
-module.exports = { Menu, MenuItem, ContactInfo, RestaurantInfo }
+module.exports = { Menu, MenuItems, ContactInfo, RestaurantInfo }
