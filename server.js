@@ -31,6 +31,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 // create menu
 app.post('/menu', jsonParser, (req, res) => {
+    console.log('post menu body: ', req.body)
     Menu.create(req.body)
         .then(menu => {
             res.status(201).json(menu)
@@ -67,7 +68,7 @@ app.get('/menu/:id', (req, res) => {
 app.post('/menu_items', jsonParser, (req, res) => {
     console.log('menu_item: ', req.body)
     let menuItems = []
-    req.body.forEach((item, index) => {
+    req.body.forEach(item => {
         menuItems.push({
             name: item.name,
             description: item.description,

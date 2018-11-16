@@ -6,12 +6,16 @@ const menuSchema = new Schema({
         type: String,
         required: true
     }
-}, { toJSON: { virtuals: true }})
+}, { 
+    // TODO: Are both of these needed?
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+})
 
 menuSchema.virtual('menuItems', {
     ref: 'MenuItems',
     localField: '_id',
-    foreignField: 'menu'
+    foreignField: 'menus'
 })
 
 const menuItemSchema = new Schema({
