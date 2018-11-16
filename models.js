@@ -6,14 +6,13 @@ const menuSchema = new Schema({
         type: String,
         required: true
     }
-})
-// , { toJSON: { virtuals: true }})
+}, { toJSON: { virtuals: true }})
 
-// menuSchema.virtual('menuItems', {
-//     ref: 'MenuItem',
-//     localField: '_id',
-//     foreignField: 'menu'
-// })
+menuSchema.virtual('menuItems', {
+    ref: 'MenuItems',
+    localField: '_id',
+    foreignField: 'menu'
+})
 
 const menuItemSchema = new Schema({
     name: {
@@ -27,7 +26,7 @@ const menuItemSchema = new Schema({
     menus: [{
         type: Schema.Types.ObjectId,
         ref: 'Menu'
-    }],
+    }]
     // for sub-categorization like Meats, Fish, Pasta, Desserts, etc. Should string be id reference instead?
     // menuSubCategories: [String]
 })

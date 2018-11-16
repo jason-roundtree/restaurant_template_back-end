@@ -54,6 +54,7 @@ app.get('/menus', (req, res) => {
 // get menu by id
 app.get('/menu/:id', (req, res) => {
     Menu.findById(req.params.id)
+        .populate('menuItems')
         .then(menu => {
             res.status(200).json(menu)
         })
@@ -71,8 +72,6 @@ app.post('/menu_items', jsonParser, (req, res) => {
             name: item.name,
             description: item.description,
             cost: item.cost,
-            // comments: item.comments,
-            // menus: req.body.menus
         })
     })
     MenuItems.insertMany(menuItems)
@@ -80,7 +79,6 @@ app.post('/menu_items', jsonParser, (req, res) => {
             res.status(201).json(item)
         })
         .catch(err => {
-            console.log('err: ', err)
             res.status(400).json(err)
         })
 })
@@ -96,8 +94,31 @@ app.get('/menu_items', (req, res) => {
         })
 })
 
+// Update/Add menu assignment and item comments
+// TODO: update so that dupes aren't added
+app.put('/menu_items/:id', jsonParser, (req, res) => {
+    console.log('Update item req.body: ', req.body) 
+    console.log('Update item req.params: ', req.params) 
+    // MenuItems.find({ _id: req.params.id })
+    MenuItems.update(
+        { _id: req.params.id },
+        { $push:
+            {
+                // comments: req.body.comments,
+                menus: req.body.menuId
+            }
+        }
+    )
+    .then(menuItem => {
+        res.status(204).end()
+    })
+    .catch(err => {
+        res.status(400).json(err)
+    })
+})
 
-// update menu
+
+// update menu name
 // update menu item(s)
 // delete menu
 // delete menu item(s)
