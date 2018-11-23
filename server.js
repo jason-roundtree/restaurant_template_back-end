@@ -31,7 +31,6 @@ if (process.env.NODE_ENV !== 'test') {
 
 // create menu
 app.post('/menu', jsonParser, (req, res) => {
-    console.log('post menu body: ', req.body)
     Menu.create(req.body)
         .then(menu => {
             res.status(201).json(menu)
@@ -66,13 +65,13 @@ app.get('/menu/:id', (req, res) => {
 
 // create menu item(s)
 app.post('/menu_items', jsonParser, (req, res) => {
-    console.log('menu_item: ', req.body)
     let menuItems = []
     req.body.forEach(item => {
         menuItems.push({
             name: item.name,
             description: item.description,
             cost: item.cost,
+            editable: false
         })
     })
     MenuItems.insertMany(menuItems)
@@ -95,23 +94,15 @@ app.get('/menu_items', (req, res) => {
         })
 })
 
-// Update/Add menu assignment and item comments
-// TODO: update so that dupes aren't added
+// Update menu item
+// TODO: figure out the best method to use here (e.g. update, updatOne, findAndReplace, etc)
 app.put('/menu_items/:id', jsonParser, (req, res) => {
-    console.log('Update item req.body: ', req.body) 
-    console.log('Update item req.params: ', req.params) 
-    // MenuItems.find({ _id: req.params.id })
-    MenuItems.update(
+    MenuItems.findByIdAndUpdate(
         { _id: req.params.id },
-        { $push:
-            {
-                // comments: req.body.comments,
-                menus: req.body.menuId
-            }
-        }
+        req.body
     )
     .then(menuItem => {
-        res.status(204).end()
+        res.status(204).json(menuItem)
     })
     .catch(err => {
         res.status(400).json(err)
