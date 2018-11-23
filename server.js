@@ -95,11 +95,11 @@ app.get('/menu_items', (req, res) => {
 })
 
 // Update menu item
-// TODO: figure out the best method to use here (e.g. update, updatOne, findAndReplace, etc)
 app.put('/menu_items/:id', jsonParser, (req, res) => {
-    MenuItems.findByIdAndUpdate(
+    MenuItems.findOneAndUpdate(
         { _id: req.params.id },
-        req.body
+        req.body,
+        { returnNewDocument: true }
     )
     .then(menuItem => {
         res.status(204).json(menuItem)
