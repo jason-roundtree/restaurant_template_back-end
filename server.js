@@ -13,7 +13,7 @@ const {
     RestaurantInfo
 } = require('./models')
 
-const { CLIENT_ORIGIN, DB_URL, PORT } = require('./config');
+const { CLIENT_ORIGIN, DB_URL, PORT } = require('./config')
 
 app.use(
     cors({
@@ -21,14 +21,15 @@ app.use(
 	})
 )
 
-mongoose.connect(DB_URL, { useNewUrlParser: true });
+mongoose.connect(DB_URL, { useNewUrlParser: true })
 
 if (process.env.NODE_ENV !== 'test') {
-	app.use(morgan('common'));
+	app.use(morgan('common'))
 }   
 
-// app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
+// TODO: move routes to their own module
 // create menu
 app.post('/menu', jsonParser, (req, res) => {
     Menu.create(req.body)
@@ -63,18 +64,17 @@ app.get('/menu/:id', (req, res) => {
         })
 })
 
-// create menu item(s)
+// create menu item
 app.post('/menu_items', jsonParser, (req, res) => {
-    let menuItems = []
-    req.body.forEach(item => {
-        menuItems.push({
-            name: item.name,
-            description: item.description,
-            cost: item.cost,
-            editable: false
-        })
-    })
-    MenuItems.insertMany(menuItems)
+    // console.log('menu_items post req: ', req)
+    const menuItem = {
+        name: req.body.name,
+        description: req.body.description,
+        cost: req.body.cost,
+        menus: req.body.menus,
+        editable: false
+    }
+    MenuItems.insert(menuItem)
         .then(item => {
             res.status(201).json(item)
         })
