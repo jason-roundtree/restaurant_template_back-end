@@ -74,7 +74,7 @@ app.post('/menu_items', jsonParser, (req, res) => {
         menus: req.body.menus,
         editable: false
     }
-    MenuItems.insert(menuItem)
+    MenuItems.create(menuItem)
         .then(item => {
             res.status(201).json(item)
         })
