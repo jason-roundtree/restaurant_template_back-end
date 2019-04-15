@@ -1,16 +1,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+// TODO: setup schemas so that menu names are accessible or populated from menuItemSchema
 const menuSchema = new Schema({
     name: {
         type: String,
         required: true
     }
-}, { 
-    // TODO: Are both of these needed?
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
-})
+}, { toJSON: { virtuals: true }})
 
 menuSchema.virtual('menuItems', {
     ref: 'MenuItems',
@@ -25,6 +22,7 @@ const menuItemSchema = new Schema({
     },
     description: String,
     cost: Number,
+    editable: Boolean,
     comments: [String],
     // a menu item can belong to multiple menus
     menus: [{

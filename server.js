@@ -32,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // TODO: move routes to their own module
 // create menu
 app.post('/menu', jsonParser, (req, res) => {
+    console.log('post menu: ', req.body)
     Menu.create(req.body)
         .then(menu => {
             res.status(201).json(menu)
@@ -86,6 +87,7 @@ app.post('/menu_items', jsonParser, (req, res) => {
 // get all menu items
 app.get('/menu_items', (req, res) => {
     MenuItems.find()
+        .populate('menus')
         .then(item => {
             res.status(200).json(item)
         })
