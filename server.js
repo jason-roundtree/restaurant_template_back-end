@@ -15,11 +15,7 @@ const {
 
 const { CLIENT_ORIGIN, DB_URL, PORT } = require('./config')
 
-app.use(
-    cors({
-        origin: CLIENT_ORIGIN
-	})
-)
+app.use(cors({ origin: CLIENT_ORIGIN }))
 
 mongoose.connect(DB_URL, { useNewUrlParser: true })
 
@@ -32,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // TODO: move routes to their own module
 // create menu
 app.post('/menu', jsonParser, (req, res) => {
-    console.log('post menu: ', req.body)
+    // console.log('post menu: ', req.body)
     Menu.create(req.body)
         .then(menu => {
             res.status(201).json(menu)
@@ -45,7 +41,7 @@ app.post('/menu', jsonParser, (req, res) => {
 // get all menus
 app.get('/menus', (req, res) => {
     Menu.find()
-    .populate('menuItems')
+        .populate('menuItems')
         .then(menu => {
             console.log('menus: ',)
             res.status(200).json(menu)
@@ -113,11 +109,22 @@ app.put('/menu_items/:id', jsonParser, (req, res) => {
     })
 })
 
+// delete menu item
+app.delete('/menu_items/:id', jsonParser, (req, res) => {
+    console.log('menu_items/:id delete: ', req.params)
+    MenuItems.remove({ _id: req.params.id })
+        .then(menuItem => {
+            res.status(204).json(menuItem)
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        })
+})
 
 // update menu name
 // update menu item(s)
 // delete menu
-// delete menu item(s)
+
 // update contact info
 // delete contact info
 // update restaurant info
