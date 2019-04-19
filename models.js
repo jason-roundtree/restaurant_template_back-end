@@ -22,15 +22,18 @@ const menuItemSchema = new Schema({
     },
     description: String,
     cost: Number,
-    editable: Boolean,
+    // editable: Boolean,
     comments: [String],
     // a menu item can belong to multiple menus
     menus: [{
         type: Schema.Types.ObjectId,
         ref: 'Menu'
     }]
-    // for sub-categorization like Meats, Fish, Pasta, Desserts, etc. Should string be id reference instead?
-    // menuSubCategories: [String]
+    // TODO: for sub-categorization like Meats, Fish, Pasta, Desserts, etc. Should sub-category be it's own schema?
+    // menuSubCategories: [[{
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'SubMenuCategory'
+    // }]
 })
 
 const contactInfoSchema = new Schema({

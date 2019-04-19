@@ -45,7 +45,9 @@ app.post('/menu', jsonParser, (req, res) => {
 // get all menus
 app.get('/menus', (req, res) => {
     Menu.find()
+    .populate('menuItems')
         .then(menu => {
+            console.log('menus: ',)
             res.status(200).json(menu)
         })
         .catch(err => {
@@ -67,7 +69,6 @@ app.get('/menu/:id', (req, res) => {
 
 // create menu item
 app.post('/menu_items', jsonParser, (req, res) => {
-    // console.log('menu_items post req: ', req)
     const menuItem = {
         name: req.body.name,
         description: req.body.description,
@@ -98,6 +99,7 @@ app.get('/menu_items', (req, res) => {
 
 // Update menu item
 app.put('/menu_items/:id', jsonParser, (req, res) => {
+    console.log('menu_items put req: ', req.body)
     MenuItems.findOneAndUpdate(
         { _id: req.params.id },
         req.body,
