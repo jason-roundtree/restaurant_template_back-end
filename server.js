@@ -63,6 +63,16 @@ app.get('/menu/:id', (req, res) => {
         })
 })
 
+app.delete('/menu/:id', (req, res) => {
+    console.log('menuId: ', req.params.id)
+    Menu.deleteOne({ _id: req.params.id })
+        .then(menu => {
+            res.status(200).json(menu)
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        })
+})
 // create menu item
 app.post('/menu_items', jsonParser, (req, res) => {
     const menuItem = {
@@ -95,7 +105,7 @@ app.get('/menu_items', (req, res) => {
 
 // Update menu item
 app.put('/menu_items/:id', jsonParser, (req, res) => {
-    console.log('menu_items put req: ', req.body)
+    // console.log('menu_items put req: ', req.body)
     MenuItems.findOneAndUpdate(
         { _id: req.params.id },
         req.body,
@@ -122,9 +132,7 @@ app.delete('/menu_items/:id', jsonParser, (req, res) => {
 })
 
 // update menu name
-// update menu item(s)
 // delete menu
-
 // update contact info
 // delete contact info
 // update restaurant info
