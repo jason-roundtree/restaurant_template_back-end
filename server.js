@@ -9,6 +9,9 @@ const morgan = require('morgan')
 const { 
     Menu, 
     MenuItems, 
+    OrderItem,
+    Order,
+    Customer,
     ContactInfo, 
     RestaurantInfo
 } = require('./models')
@@ -28,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // TODO: move routes to their own module
 // create menu
 app.post('/menu', jsonParser, (req, res) => {
-    // console.log('post menu: ', req.body)
+    console.log('post menu: ', req.body)
     Menu.create(req.body)
         .then(menu => {
             res.status(201).json(menu)
@@ -103,6 +106,18 @@ app.get('/menu_items', (req, res) => {
         })
 })
 
+// get menu item by id
+app.get('/menu_items/:id', jsonParser, (req, res) => {
+    console.log('get item by id: ', req.params.id)
+    MenuItems.find({ _id: req.params.id })
+        .then(item => {
+            res.status(200).json(item)
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        })
+})
+
 // Update menu item
 app.put('/menu_items/:id', jsonParser, (req, res) => {
     // console.log('menu_items put req: ', req.body)
@@ -111,8 +126,8 @@ app.put('/menu_items/:id', jsonParser, (req, res) => {
         req.body,
         { returnNewDocument: true }
     )
-    .then(menuItem => {
-        res.status(204).json(menuItem)
+    .then(item => {
+        res.status(204).json(item)
     })
     .catch(err => {
         res.status(400).json(err)
@@ -130,6 +145,33 @@ app.delete('/menu_items/:id', jsonParser, (req, res) => {
             res.status(400).json(err)
         })
 })
+
+// add order item
+app.post('/order_item', jsonParser, (req, res) => {
+    // console.log('add order item: ', req.body)
+    OrderItem.create(req.body)
+        .then(orderItem => {
+            console.log('orderItem POST: ', orderItem)
+            res.status(201).json(orderItem)
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        })
+})
+
+// add order
+app.post('/order', jsonParser, (req, res) => {
+    console.log('add order item: ', req.body)
+    OrderItem.create(req.body)
+        .then(order => {
+            console.log('order POST: ', order)
+            res.status(201).json(order)
+        })
+        .catch(err => {
+            res.status(400).json(err)
+        })
+})
+
 
 // update menu name
 // delete menu
