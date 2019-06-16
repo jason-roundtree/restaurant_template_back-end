@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-// const uuid = require('uuid')
 
 // TODO: setup schemas so that menu names are accessible or populated from menuItemSchema
 const menuSchema = new Schema({
@@ -81,16 +80,16 @@ const orderSchema = new Schema({
     }
 })
 
-const customerSchema = new Schema ({
-    customerFirstName: {
+const customerSchema = new Schema({
+    firstName: {
         type: String,
         required: true
     }, 
-    customerLastName: {
+    lastName: {
         type: String,
         required: true
     },
-    customerPhone: {
+    phone: {
         type: Number,
         required: true
     }    
