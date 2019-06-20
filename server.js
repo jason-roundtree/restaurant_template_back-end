@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const jsonParser = bodyParser.json()
+// const jsonParser = bodyParser.json()
 const mongoose = require('mongoose')
 const morgan = require('morgan')
 
@@ -27,11 +27,11 @@ if (process.env.NODE_ENV !== 'test') {
 }   
 
 app.use(bodyParser.urlencoded({ extended: false }))
-// app.use(bodyParser.json())
+app.use(bodyParser.json())
 
 // TODO: move routes to their own module
 // create menu
-app.post('/menu', jsonParser, (req, res) => {
+app.post('/menu', (req, res) => {
     console.log('post menu: ', req.body)
     Menu.create(req.body)
         .then(menu => {
@@ -78,7 +78,7 @@ app.delete('/menu/:id', (req, res) => {
         })
 })
 // create menu item
-app.post('/menu_items', jsonParser, (req, res) => {
+app.post('/menu_items', (req, res) => {
     const menuItem = {
         name: req.body.name,
         description: req.body.description,
@@ -108,7 +108,7 @@ app.get('/menu_items', (req, res) => {
 })
 
 // get menu item by id
-app.get('/menu_items/:id', jsonParser, (req, res) => {
+app.get('/menu_items/:id', (req, res) => {
     console.log('get item by id: ', req.params.id)
     MenuItems.find({ _id: req.params.id })
         .then(item => {
@@ -120,7 +120,7 @@ app.get('/menu_items/:id', jsonParser, (req, res) => {
 })
 
 // Update menu item
-app.put('/menu_items/:id', jsonParser, (req, res) => {
+app.put('/menu_items/:id', (req, res) => {
     // console.log('menu_items put req: ', req.body)
     MenuItems.findOneAndUpdate(
         { _id: req.params.id },
@@ -136,7 +136,7 @@ app.put('/menu_items/:id', jsonParser, (req, res) => {
 })
 
 // delete menu item
-app.delete('/menu_items/:id', jsonParser, (req, res) => {
+app.delete('/menu_items/:id', (req, res) => {
     console.log('menu_items/:id delete: ', req.params)
     MenuItems.remove({ _id: req.params.id })
         .then(menuItem => {
@@ -148,13 +148,15 @@ app.delete('/menu_items/:id', jsonParser, (req, res) => {
 })
 
 // add contact info
-app.post('/customer', jsonParser, (req, res) => {
+app.post('/customer', (req, res) => {
     console.log('get customer info: ', req.body)
-    Customer.updateOne(
+    Customer.findOneAndUpdate(
         { phone: req.body.phone }, 
         req.body,
-        { upsert: true })
-        
+        { 
+            upsert: true,
+            returnNewDocument: true
+        })
         .then(customer => {
             console.log('phone res: ', customer)
             res.status(200).json(customer)
@@ -163,23 +165,16 @@ app.post('/customer', jsonParser, (req, res) => {
             console.log('err res: ', err)
             res.status(400).json(err)
         })
-    // Customer.create(req.body)
-    //     .then(customer => {
-    //         console.log('order customer info: ', customer)
-    //         res.status(201).json(customer)
-    //     })
-    //     .catch(err => {
-    //         res.status(400).json(err)
-    //     })
 })
 
 // add order item
-app.post('/order_item', jsonParser, (req, res) => {
+app.post('/order_item', (req, res) => {
     // console.log('add order item: ', req.body)
-    OrderItem.create(req.body)
-        .then(orderItem => {
-            console.log('orderItem POST: ', orderItem)
-            res.status(201).json(orderItem)
+    // OrderItem.create(req.body)
+    OrderItem.insertMany(req.body)
+        .then(orderItems => {
+            console.log('orderItems POST: ', orderItems)
+            res.status(201).json(orderItems)
         })
         .catch(err => {
             res.status(400).json(err)
@@ -187,29 +182,25 @@ app.post('/order_item', jsonParser, (req, res) => {
 })
 
 // add order
-app.post('/order', jsonParser, (req, res) => {
-    console.log('add order item: ', ç)
-    OrderItem.create(req.body)
+app.post('/order', (req, res) => {
+    console.log('add order item: ', req.body)
+    Order.create(req.body)
         .then(order => {
-            console.log('order POST: ', order)
+            console.log('order POST then: ', order)
             res.status(201).json(order)
         })
         .catch(err => {
+            console.log('order POST catch: ', err)
             res.status(400).json(err)
         })
 })
 
-
-// update menu name
-// delete menu
 // update contact info
 // delete contact info
 // update restaurant info
 // create new user
 // update user (name, email, reset password, active/inactive/permissions)
 // delete user
-
-
 
 let server
 

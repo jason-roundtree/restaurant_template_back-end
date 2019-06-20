@@ -65,7 +65,7 @@ const orderSchema = new Schema({
         type: Number,
         required: true
     },
-    totalTax: {
+    taxAmount: {
         type: Number,
         required: true
     },
@@ -75,8 +75,7 @@ const orderSchema = new Schema({
     },
     date: {
         type: Date, 
-        default: Date.now,
-        required: true
+        default: Date.now
     }
 })
 
